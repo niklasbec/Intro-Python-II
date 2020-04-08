@@ -1,4 +1,5 @@
 from room import Room
+from player import NewPlayer
 
 # Declare all the rooms
 
@@ -24,14 +25,14 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room['outside'].n_to = 'foyer'
+room['foyer'].s_to = 'outside'
+room['foyer'].n_to = 'overlook'
+room['foyer'].e_to = 'narrow'
+room['overlook'].s_to = 'foyer'
+room['narrow'].w_to = 'foyer'
+room['narrow'].n_to = 'treasure'
+room['treasure'].s_to = 'narrow'
 
 #
 # Main
@@ -49,3 +50,42 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+gameOver = False
+
+playerInput = input("Enter Player Name: ")
+if playerInput == "q":
+    exit()
+
+player = NewPlayer(playerInput, "outside")
+print(player)
+print("Enter q at any point to quit!")
+
+while gameOver == False:
+    print(room[player.room])
+    nextMove = input("Where do you want to go? Answer with N , E , S or W: ")
+    if nextMove == "q":
+        exit()
+    elif nextMove == "N":
+        if hasattr(room[player.room], 'n_to'):
+            player.move(room[player.room].n_to.lower())
+        else:
+            print("Move not possible")
+    elif nextMove == "E":
+        if hasattr(room[player.room], 'e_to'):
+            player.move(room[player.room].e_to.lower())
+        else:
+            print("Move not possible")
+    elif nextMove == "S":
+        if hasattr(room[player.room], 's_to'):
+            player.move(room[player.room].s_to.lower())
+        else:
+            print("Move not possible")
+    elif nextMove == "W":
+        if hasattr(room[player.room], 'w_to'):
+            player.move(room[player.room].w_to.lower())
+        else:
+            print("Move not possible")
+    else:
+        print("Direction not recognized")
+    
